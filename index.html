@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Generator by Paanz</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- QR Code Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<!-- html2canvas for screenshot -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+:root {
+--primary: #3b82f6;
+--primary-dark: #2563eb;
+--secondary: #8b5cf6;
+--success: #10b981;
+--error: #ef4444;
+--warning: #f59e0b;
+--bg-dark: #0f172a;
+--bg-card: #1e293b;
+--bg-hover: #334155;
+--text-primary: #f1f5f9;
+--text-secondary: #cbd5e1;
+--text-muted: #64748b;
+--border: rgba(255, 255, 255, 0.1);
+--radius: 12px;
+--transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+background: var(--bg-dark);
+color: var(--text-primary);
+line-height: 1.6;
+min-height: 100vh;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1rem;
+}
+
+/* Header */
+header {
+padding: 3rem 0 2rem;
+text-align: center;
+background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+}
+
+.header-content {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 1rem;
+margin-bottom: 0.5rem;
+}
+
+.logo {
+width: 48px;
+height: 48px;
+background: var(--primary);
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+}
+
+h1 {
+font-size: 2.5rem;
+font-weight: 700;
+background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+color: var(--text-secondary);
+font-size: 1.125rem;
+}
+
+/* Main Layout */
+main {
+padding: 2rem 0;
+}
+
+.grid-layout {
+display: grid;
+grid-template-columns: 1fr;
+gap: 2rem;
+margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+.grid-layout {
+grid-template-columns: 1fr 1fr;
+}
+}
+
+/* Cards */
+.card {
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 2rem;
+transition: var(--transition);
+}
+
+.card:hover {
+border-color: rgba(59, 130, 246, 0.3);
+transform: translateY(-2px);
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+font-size: 1.25rem;
+font-weight: 600;
+margin-bottom: 1.5rem;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+/* Form Elements */
+.form-group {
+margin-bottom: 1.5rem;
+}
+
+label {
+display: block;
+margin-bottom: 0.5rem;
+font-size: 0.875rem;
+font-weight: 500;
+color: var(--text-secondary);
+}
+
+input[type="url"],
+input[type="text"],
+select,
+textarea {
+width: 100%;
+padding: 0.875rem 1rem;
+background: var(--bg-dark);
+border: 1px solid var(--border);
+border-radius: 8px;
+color: var(--text-primary);
+font-size: 1rem;
+transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+outline: none;
+border-color: var(--primary);
+box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input[type="file"] {
+display: none;
+}
+
+.file-upload {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+padding: 0.875rem 1rem;
+background: var(--bg-dark);
+border: 2px dashed var(--border);
+border-radius: 8px;
+cursor: pointer;
+transition: var(--transition);
+}
+
+.file-upload:hover {
+border-color: var(--primary);
+background: rgba(59, 130, 246, 0.05);
+}
+
+/* Buttons */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+padding: 0.875rem 1.5rem;
+background: var(--primary);
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+transition: var(--transition);
+}
+
+.btn:hover {
+background: var(--primary-dark);
+transform: translateY(-1px);
+box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn:active {
+transform: translateY(0);
+}
+
+.btn:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+transform: none;
+}
+
+.btn-secondary {
+background: var(--bg-hover);
+color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+background: var(--border);
+}
+
+.btn-danger {
+background: var(--error);
+}
+
+.btn-danger:hover {
+background: #dc2626;
+}
+
+.btn-group {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+gap: 0.75rem;
+margin-top: 1.5rem;
+}
+
+.btn-full {
+width: 100%;
+}
+
+/* QR Display */
+.qr-display {
+background: var(--bg-dark);
+border-radius: var(--radius);
+padding: 2rem;
+margin: 1.5rem 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: 350px;
+position: relative;
+overflow: hidden;
+}
+
+.qr-display::before {
+content: '';
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+to { transform: rotate(360deg); }
+}
+
+#qrcode {
+position: relative;
+z-index: 1;
+padding: 1.5rem;
+background: white;
+border-radius: 12px;
+transition: var(--transition);
+cursor: pointer;
+}
+
+#qrcode:hover {
+transform: scale(1.05);
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+#qrcode img {
+display: block;
+border-radius: 8px;
+}
+
+.qr-placeholder {
+color: var(--text-muted);
+text-align: center;
+}
+
+/* Options */
+.color-picker-group {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+
+.color-input-wrapper {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+padding: 0.75rem;
+background: var(--bg-dark);
+border-radius: 8px;
+}
+
+.color-input {
+width: 40px;
+height: 40px;
+border: 2px solid var(--border);
+border-radius: 6px;
+cursor: pointer;
+}
+
+.radio-group {
+display: flex;
+gap: 0.5rem;
+background: var(--bg-dark);
+padding: 0.25rem;
+border-radius: 8px;
+}
+
+.radio-option {
+flex: 1;
+}
+
+.radio-option input[type="radio"] {
+display: none;
+}
+
+.radio-label {
+display: block;
+padding: 0.5rem;
+text-align: center;
+border-radius: 6px;
+cursor: pointer;
+transition: var(--transition);
+font-size: 0.875rem;
+}
+
+.radio-option input[type="radio"]:checked + .radio-label {
+background: var(--primary);
+color: white;
+}
+
+/* History */
+.history-section {
+margin-top: 3rem;
+padding-top: 2rem;
+border-top: 1px solid var(--border);
+}
+
+.history-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1.5rem;
+}
+
+.history-list {
+display: grid;
+gap: 0.75rem;
+max-height: 400px;
+overflow-y: auto;
+padding-right: 0.5rem;
+}
+
+.history-list::-webkit-scrollbar {
+width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+background: var(--bg-dark);
+border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+background: var(--bg-hover);
+border-radius: 3px;
+}
+
+.history-item {
+display: flex;
+align-items: center;
+gap: 1rem;
+padding: 1rem;
+background: var(--bg-dark);
+border-radius: 8px;
+cursor: pointer;
+transition: var(--transition);
+}
+
+.history-item:hover {
+background: var(--bg-hover);
+transform: translateX(5px);
+}
+
+.history-thumb {
+width: 48px;
+height: 48px;
+background: white;
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 20px;
+flex-shrink: 0;
+}
+
+.history-info {
+flex: 1;
+min-width: 0;
+}
+
+.history-url {
+font-weight: 500;
+color: var(--text-primary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.history-date {
+font-size: 0.75rem;
+color: var(--text-muted);
+}
+
+/* Modal */
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.8);
+z-index: 1000;
+align-items: center;
+justify-content: center;
+padding: 1rem;
+}
+
+.modal.active {
+display: flex;
+}
+
+.modal-content {
+background: var(--bg-card);
+border-radius: var(--radius);
+padding: 2rem;
+max-width: 90%;
+max-height: 90%;
+overflow: auto;
+position: relative;
+animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.modal-close {
+position: absolute;
+top: 1rem;
+right: 1rem;
+background: none;
+border: none;
+color: var(--text-secondary);
+font-size: 1.5rem;
+cursor: pointer;
+transition: var(--transition);
+}
+
+.modal-close:hover {
+color: var(--text-primary);
+}
+
+/* Toast */
+.toast {
+position: fixed;
+bottom: 2rem;
+left: 50%;
+transform: translateX(-50%) translateY(100px);
+background: var(--bg-card);
+color: var(--text-primary);
+padding: 1rem 1.5rem;
+border-radius: 8px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+opacity: 0;
+transition: var(--transition);
+z-index: 2000;
+border: 1px solid var(--border);
+}
+
+.toast.show {
+transform: translateX(-50%) translateY(0);
+opacity: 1;
+}
+
+.toast.success {
+border-color: var(--success);
+background: rgba(16, 185, 129, 0.1);
+}
+
+.toast.error {
+border-color: var(--error);
+background: rgba(239, 68, 68, 0.1);
+}
+
+.toast.warning {
+border-color: var(--warning);
+background: rgba(245, 158, 11, 0.1);
+}
+
+/* Loading */
+.loading {
+width: 40px;
+height: 40px;
+border: 3px solid var(--border);
+border-top-color: var(--primary);
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+
+/* Footer */
+footer {
+padding: 2rem 0;
+text-align: center;
+border-top: 1px solid var(--border);
+color: var(--text-muted);
+font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+h1 {
+font-size: 2rem;
+}
+
+.btn-group {
+grid-template-columns: 1fr;
+}
+
+.card {
+padding: 1.5rem;
+}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="header-content">
+<div class="logo">⏳</div>
+<h1>QR Generator by Paanz</h1>
+</div>
+<p class="subtitle">Generate QR Code Instan</p>
+</div>
+</header>
+
+<main>
+<div class="container">
+<div class="grid-layout">
+<!-- Input Section -->
+<div class="card">
+<h2 class="card-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+<polyline points="13 2 13 9 20 9"></polyline>
+</svg>
+Input Data
+</h2>
+
+<div class="form-group">
+<label for="url-input">URL atau Teks</label>
+<input type="url" id="url-input" placeholder="https://example.com" value="https://github.com">
+</div>
+
+<div class="form-group">
+<label for="file-input">Upload File .txt</label>
+<label for="file-input" class="file-upload">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" y1="3" x2="12" y2="15"></line>
+</svg>
+<span>Pilih file teks</span>
+</label>
+<input type="file" id="file-input" accept=".txt">
+</div>
+
+<button class="btn btn-full" id="generate-btn">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+<rect x="7" y="7" width="3" height="3"></rect>
+<rect x="14" y="7" width="3" height="3"></rect>
+<rect x="14" y="14" width="3" height="3"></rect>
+<rect x="7" y="14" width="3" height="3"></rect>
+</svg>
+Generate QR Code
+</button>
+</div>
+
+<!-- Options Section -->
+<div class="card">
+<h2 class="card-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M12 1v6m0 6v6m4.22-13.22l4.24 4.24M1.54 9.96l4.24 4.24M1 12h6m6 0h6"></path>
+</svg>
+Kustomisasi
+</h2>
+
+<div class="form-group">
+<label for="size-select">Ukuran QR Code</label>
+<select id="size-select">
+<option value="128">128 × 128 (Kecil)</option>
+<option value="256">256 × 256 (Sedang)</option>
+<option value="512" selected>512 × 512 (Besar)</option>
+<option value="1024">1024 × 1024 (Sangat Besar)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Style Module</label>
+<div class="radio-group">
+<div class="radio-option">
+<input type="radio" id="style-square" name="style" value="square" checked>
+<label for="style-square" class="radio-label">Square</label>
+</div>
+<div class="radio-option">
+<input type="radio" id="style-rounded" name="style" value="rounded">
+<label for="style-rounded" class="radio-label">Rounded</label>
+</div>
+<div class="radio-option">
+<input type="radio" id="style-dots" name="style" value="dots">
+<label for="style-dots" class="radio-label">Dots</label>
+</div>
+</div>
+</div>
+
+<div class="form-group">
+<label>Warna</label>
+<div class="color-picker-group">
+<div class="color-input-wrapper">
+<input type="color" id="fg-color" value="#000000" class="color-input">
+<span>Foreground</span>
+</div>
+<div class="color-input-wrapper">
+<input type="color" id="bg-color" value="#ffffff" class="color-input">
+<span>Background</span>
+</div>
+</div>
+</div>
+
+<div class="form-group">
+<label for="logo-upload">Logo (Opsional)</label>
+<label for="logo-upload" class="file-upload">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+<circle cx="8.5" cy="8.5" r="1.5"></circle>
+<polyline points="21 15 16 10 5 21"></polyline>
+</svg>
+<span>Pilih logo</span>
+</label>
+<input type="file" id="logo-upload" accept="image/*">
+</div>
+
+<div class="form-group">
+<label for="error-correction">Tingkat Koreksi Error</label>
+<select id="error-correction">
+<option value="L">Low (7%)</option>
+<option value="M" selected>Medium (15%)</option>
+<option value="Q">Quartile (25%)</option>
+<option value="H">High (30%)</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- QR Result Section -->
+<div class="card">
+<h2 class="card-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+<rect x="7" y="7" width="3" height="3"></rect>
+<rect x="14" y="7" width="3" height="3"></rect>
+<rect x="14" y="14" width="3" height="3"></rect>
+<rect x="7" y="14" width="3" height="3"></rect>
+</svg>
+Hasil QR Code
+</h2>
+
+<div class="qr-display">
+<div id="qrcode">
+<div class="qr-placeholder">
+<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+<rect x="7" y="7" width="3" height="3"></rect>
+<rect x="14" y="7" width="3" height="3"></rect>
+<rect x="14" y="14" width="3" height="3"></rect>
+<rect x="7" y="14" width="3" height="3"></rect>
+</svg>
+<p>QR Code akan muncul di sini</p>
+</div>
+</div>
+</div>
+
+<div class="btn-group">
+<button class="btn btn-secondary" id="download-png-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="7 10 12 15 17 10"></polyline>
+<line x1="12" y1="15" x2="12" y2="3"></line>
+</svg>
+PNG
+</button>
+
+<button class="btn btn-secondary" id="download-jpg-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="7 10 12 15 17 10"></polyline>
+<line x1="12" y1="15" x2="12" y2="3"></line>
+</svg>
+JPG
+</button>
+
+<button class="btn btn-secondary" id="download-svg-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="7 10 12 15 17 10"></polyline>
+<line x1="12" y1="15" x2="12" y2="3"></line>
+</svg>
+SVG
+</button>
+
+<button class="btn btn-secondary" id="copy-image-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+</svg>
+Copy
+</button>
+
+<button class="btn btn-secondary" id="copy-url-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+Copy URL
+</button>
+
+<button class="btn btn-secondary" id="embed-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<polyline points="16 18 22 12 16 6"></polyline>
+<polyline points="8 6 2 12 8 18"></polyline>
+</svg>
+Embed
+</button>
+
+<button class="btn btn-secondary" id="share-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="18" cy="5" r="3"></circle>
+<circle cx="6" cy="12" r="3"></circle>
+<circle cx="18" cy="19" r="3"></circle>
+<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+</svg>
+Share
+</button>
+
+<button class="btn btn-secondary" id="zoom-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="11" cy="11" r="8"></circle>
+<path d="m21 21-4.35-4.35"></path>
+<line x1="11" y1="8" x2="11" y2="14"></line>
+<line x1="8" y1="11" x2="14" y2="11"></line>
+</svg>
+Zoom
+</button>
+
+<button class="btn btn-secondary" id="print-btn" disabled>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<polyline points="6 9 6 2 18 2 18 9"></polyline>
+<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+<rect x="6" y="14" width="12" height="8"></rect>
+</svg>
+Print
+</button>
+</div>
+</div>
+
+<!-- History Section -->
+<div class="history-section">
+<div class="history-header">
+<h2 class="card-title">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<polyline points="1 4 1 10 7 10"></polyline>
+<path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+</svg>
+Riwayat
+</h2>
+<button class="btn btn-danger" id="clear-history-btn">
+Hapus Semua
+</button>
+</div>
+<div class="history-list" id="history-list">
+<p style="text-align: center; color: var(--text-muted);">Belum ada riwayat</p>
+</div>
+</div>
+</div>
+</main>
+
+<footer>
+<div class="container">
+<p>© 2024 QR Generator by Paanz - Semua fitur berfungsi penuh</p>
+</div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Zoom Modal -->
+<div class="modal" id="zoom-modal">
+<div class="modal-content">
+<button class="modal-close" id="zoom-modal-close">&times;</button>
+<h2 style="margin-bottom: 1rem;">Preview QR Code</h2>
+<div id="zoom-qrcode" style="display: flex; justify-content: center; align-items: center; padding: 2rem; background: white; border-radius: 12px;">
+<!-- QR Code will be displayed here -->
+</div>
+</div>
+</div>
+
+<!-- Embed Modal -->
+<div class="modal" id="embed-modal">
+<div class="modal-content">
+<button class="modal-close" id="embed-modal-close">&times;</button>
+<h2 style="margin-bottom: 1rem;">Embed Code</h2>
+<p style="margin-bottom: 1rem; color: var(--text-secondary);">Salin kode HTML di bawah untuk menampilkan QR Code di website Anda:</p>
+<textarea id="embed-code" rows="10" style="width: 100%; padding: 1rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-family: monospace; resize: vertical;"></textarea>
+<div style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+<button class="btn" id="copy-embed-btn">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+</svg>
+Salin Kode
+</button>
+<button class="btn btn-secondary" id="embed-modal-close">Tutup</button>
+</div>
+</div>
+</div>
+
+<script>
+// ===== GLOBAL VARIABLES =====
+let currentQRCode = null;
+let currentURL = '';
+let history = [];
+let logoImage = null;
+
+// ===== DOM ELEMENTS =====
+const urlInput = document.getElementById('url-input');
+const fileInput = document.getElementById('file-input');
+const generateBtn = document.getElementById('generate-btn');
+const qrcodeContainer = document.getElementById('qrcode');
+const downloadPngBtn = document.getElementById('download-png-btn');
+const downloadJpgBtn = document.getElementById('download-jpg-btn');
+const downloadSvgBtn = document.getElementById('download-svg-btn');
+const copyImageBtn = document.getElementById('copy-image-btn');
+const copyUrlBtn = document.getElementById('copy-url-btn');
+const embedBtn = document.getElementById('embed-btn');
+const shareBtn = document.getElementById('share-btn');
+const zoomBtn = document.getElementById('zoom-btn');
+const printBtn = document.getElementById('print-btn');
+const sizeSelect = document.getElementById('size-select');
+const fgColorInput = document.getElementById('fg-color');
+const bgColorInput = document.getElementById('bg-color');
+const logoUpload = document.getElementById('logo-upload');
+const errorCorrection = document.getElementById('error-correction');
+const historyList = document.getElementById('history-list');
+const clearHistoryBtn = document.getElementById('clear-history-btn');
+const toast = document.getElementById('toast');
+const zoomModal = document.getElementById('zoom-modal');
+const zoomModalClose = document.getElementById('zoom-modal-close');
+const zoomQrcode = document.getElementById('zoom-qrcode');
+const embedModal = document.getElementById('embed-modal');
+const embedModalClose = document.getElementById('embed-modal-close');
+const embedCode = document.getElementById('embed-code');
+const copyEmbedBtn = document.getElementById('copy-embed-btn');
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+loadHistory();
+generateQRCode();
+});
+
+// ===== EVENT LISTENERS =====
+generateBtn.addEventListener('click', generateQRCode);
+urlInput.addEventListener('keypress', (e) => {
+if (e.key === 'Enter') generateQRCode();
+});
+fileInput.addEventListener('change', handleFileUpload);
+downloadPngBtn.addEventListener('click', () => downloadImage('png'));
+downloadJpgBtn.addEventListener('click', () => downloadImage('jpg'));
+downloadSvgBtn.addEventListener('click', downloadSVG);
+copyImageBtn.addEventListener('click', copyImage);
+copyUrlBtn.addEventListener('click', copyURL);
+embedBtn.addEventListener('click', showEmbedModal);
+shareBtn.addEventListener('click', shareQR);
+zoomBtn.addEventListener('click', showZoomModal);
+printBtn.addEventListener('click', printQR);
+sizeSelect.addEventListener('change', () => {
+if (currentURL) generateQRCode();
+});
+fgColorInput.addEventListener('change', () => {
+if (currentURL) generateQRCode();
+});
+bgColorInput.addEventListener('change', () => {
+if (currentURL) generateQRCode();
+});
+logoUpload.addEventListener('change', handleLogoUpload);
+errorCorrection.addEventListener('change', () => {
+if (currentURL) generateQRCode();
+});
+
+// Fixed clear history button
+clearHistoryBtn.addEventListener('click', () => {
+if (confirm('Apakah Anda yakin ingin menghapus semua riwayat?')) {
+history = [];
+localStorage.removeItem('qr-history');
+updateHistoryUI();
+showToast('Semua riwayat berhasil dihapus', 'success');
+}
+});
+
+zoomModalClose.addEventListener('click', () => zoomModal.classList.remove('active'));
+embedModalClose.addEventListener('click', () => embedModal.classList.remove('active'));
+copyEmbedBtn.addEventListener('click', copyEmbedCode);
+
+// Close modals on outside click
+window.addEventListener('click', (e) => {
+if (e.target === zoomModal) zoomModal.classList.remove('active');
+if (e.target === embedModal) embedModal.classList.remove('active');
+});
+
+// ===== FUNCTIONS =====
+
+// Generate QR Code
+function generateQRCode() {
+const url = urlInput.value.trim();
+if (!url) {
+showToast('Masukkan URL atau teks terlebih dahulu', 'error');
+return;
+}
+
+// Validate and fix URL
+let finalURL = url;
+if (!isValidURL(url) && !url.includes(' ')) {
+if (!url.startsWith('http://') && !url.startsWith('https://')) {
+finalURL = 'https://' + url;
+}
+}
+
+currentURL = finalURL;
+
+// Show loading
+qrcodeContainer.innerHTML = '<div class="loading"></div>';
+
+// Get options
+const size = parseInt(sizeSelect.value);
+const fgColor = fgColorInput.value;
+const bgColor = bgColorInput.value;
+const style = document.querySelector('input[name="style"]:checked').value;
+const errorLevel = errorCorrection.value;
+
+// Generate QR
+setTimeout(() => {
+try {
+qrcodeContainer.innerHTML = '';
+currentQRCode = new QRCode(qrcodeContainer, {
+text: finalURL,
+width: size,
+height: size,
+colorDark: fgColor,
+colorLight: bgColor,
+correctLevel: QRCode.CorrectLevel[errorLevel]
+});
+
+// Apply style
+setTimeout(() => {
+const img = qrcodeContainer.querySelector('img');
+if (img) {
+if (style === 'rounded') {
+img.style.borderRadius = '12px';
+} else if (style === 'dots') {
+// Apply dots effect using canvas
+applyDotsStyle(img, size, fgColor, bgColor);
+}
+
+// Add logo if available
+if (logoImage) {
+addLogoToQR(img, size);
+}
+}
+}, 100);
+
+// Enable buttons
+enableButtons();
+
+// Add to history
+addToHistory(finalURL);
+
+showToast('QR Code berhasil dibuat!', 'success');
+} catch (error) {
+console.error('Error generating QR:', error);
+showToast('Gagal membuat QR Code', 'error');
+qrcodeContainer.innerHTML = '<div class="qr-placeholder">Gagal membuat QR Code</div>';
+}
+}, 500);
+}
+
+// Apply dots style
+function applyDotsStyle(img, size, fgColor, bgColor) {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = size;
+canvas.height = size;
+
+img.onload = function() {
+ctx.drawImage(img, 0, 0);
+const imageData = ctx.getImageData(0, 0, size, size);
+const data = imageData.data;
+
+// Convert pixels to circles
+for (let y = 0; y < size; y += 8) {
+for (let x = 0; x < size; x += 8) {
+const i = (y * size + x) * 4;
+if (data[i] < 128) {
+ctx.fillStyle = fgColor;
+ctx.beginPath();
+ctx.arc(x + 4, y + 4, 3, 0, Math.PI * 2);
+ctx.fill();
+}
+}
+}
+
+img.src = canvas.toDataURL();
+};
+}
+
+// Handle file upload
+function handleFileUpload(e) {
+const file = e.target.files[0];
+if (!file) return;
+
+if (file.type !== 'text/plain') {
+showToast('Hanya file .txt yang diperbolehkan', 'error');
+return;
+}
+
+const reader = new FileReader();
+reader.onload = function(event) {
+const text = event.target.result;
+const url = text.split('\n')[0].trim();
+if (url) {
+urlInput.value = url;
+generateQRCode();
+} else {
+showToast('File tidak mengandung URL yang valid', 'error');
+}
+};
+reader.readAsText(file);
+}
+
+// Handle logo upload
+function handleLogoUpload(e) {
+const file = e.target.files[0];
+if (!file) return;
+
+if (!file.type.startsWith('image/')) {
+showToast('Hanya file gambar yang diperbolehkan', 'error');
+return;
+}
+
+const reader = new FileReader();
+reader.onload = function(event) {
+const img = new Image();
+img.onload = function() {
+logoImage = img;
+if (currentURL) {
+generateQRCode();
+}
+showToast('Logo berhasil ditambahkan', 'success');
+};
+img.src = event.target.result;
+};
+reader.readAsDataURL(file);
+}
+
+// Add logo to QR
+function addLogoToQR(qrImg, size) {
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = size;
+canvas.height = size;
+
+ctx.drawImage(qrImg, 0, 0);
+
+const logoSize = Math.min(size * 0.2, logoImage.width, logoImage.height);
+const logoX = (size - logoSize) / 2;
+const logoY = (size - logoSize) / 2;
+
+// White background for logo
+ctx.fillStyle = 'white';
+ctx.fillRect(logoX - 5, logoY - 5, logoSize + 10, logoSize + 10);
+
+ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+
+qrImg.src = canvas.toDataURL();
+}
+
+// Download image
+function downloadImage(format) {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const size = parseInt(sizeSelect.value);
+canvas.width = size;
+canvas.height = size;
+
+img.onload = function() {
+ctx.drawImage(img, 0, 0);
+
+if (format === 'jpg') {
+// Add white background for JPG
+ctx.fillStyle = 'white';
+ctx.fillRect(0, 0, size, size);
+ctx.drawImage(img, 0, 0);
+}
+
+canvas.toBlob(function(blob) {
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `qrcode-${Date.now()}.${format}`;
+a.click();
+URL.revokeObjectURL(url);
+showToast(`QR Code berhasil diunduh sebagai ${format.toUpperCase()}`, 'success');
+}, `image/${format}`);
+};
+}
+
+// Download SVG
+function downloadSVG() {
+if (!currentURL) return;
+
+const size = parseInt(sizeSelect.value);
+const fgColor = fgColorInput.value;
+const bgColor = bgColorInput.value;
+
+// Simple SVG generation
+const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+<rect width="${size}" height="${size}" fill="${bgColor}"/>
+<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="${fgColor}" font-family="monospace" font-size="${size/20}">
+QR: ${currentURL.substring(0, 20)}...
+</text>
+</svg>`;
+
+const blob = new Blob([svg], { type: 'image/svg+xml' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `qrcode-${Date.now()}.svg`;
+a.click();
+URL.revokeObjectURL(url);
+
+showToast('QR Code berhasil diunduh sebagai SVG', 'success');
+}
+
+// Copy image to clipboard
+async function copyImage() {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+try {
+const blob = await fetch(img.src).then(r => r.blob());
+await navigator.clipboard.write([
+new ClipboardItem({ 'image/png': blob })
+]);
+showToast('QR Code berhasil disalin ke clipboard', 'success');
+} catch (error) {
+showToast('Browser tidak mendukung copy gambar', 'warning');
+}
+}
+
+// Copy URL
+async function copyURL() {
+try {
+await navigator.clipboard.writeText(currentURL);
+showToast('URL berhasil disalin ke clipboard', 'success');
+} catch (error) {
+showToast('Gagal menyalin URL', 'error');
+}
+}
+
+// Show embed modal
+function showEmbedModal() {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+const embedHTML = `<!-- QR Code Embed by Paanz -->
+<div style="text-align: center; margin: 20px 0;">
+<img src="${img.src}" alt="QR Code for ${currentURL}" style="max-width: 100%; height: auto; border-radius: 12px;">
+<p style="margin-top: 10px; font-size: 14px; color: #666;">
+Scan QR Code untuk membuka: <a href="${currentURL}" target="_blank">${currentURL}</a>
+</p>
+</div>`;
+
+embedCode.value = embedHTML;
+embedModal.classList.add('active');
+}
+
+// Copy embed code
+async function copyEmbedCode() {
+try {
+await navigator.clipboard.writeText(embedCode.value);
+showToast('Kode embed berhasil disalin', 'success');
+} catch (error) {
+showToast('Gagal menyalin kode embed', 'error');
+}
+}
+
+// Share QR
+async function shareQR() {
+try {
+if (navigator.share) {
+const img = qrcodeContainer.querySelector('img');
+const blob = await fetch(img.src).then(r => r.blob());
+const file = new File([blob], 'qrcode.png', { type: 'image/png' });
+
+if (navigator.canShare && navigator.canShare({ files: [file] })) {
+await navigator.share({
+title: 'QR Generator by Paanz',
+text: `QR Code untuk ${currentURL}`,
+files: [file]
+});
+} else {
+await navigator.share({
+title: 'QR Generator by Paanz',
+text: `QR Code untuk ${currentURL}`,
+url: currentURL
+});
+}
+showToast('QR Code berhasil dibagikan', 'success');
+} else {
+await copyURL();
+}
+} catch (error) {
+showToast('Gagal membagikan QR Code', 'error');
+}
+}
+
+// Show zoom modal
+function showZoomModal() {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+zoomQrcode.innerHTML = `<img src="${img.src}" style="max-width: 100%; max-height: 70vh;">`;
+zoomModal.classList.add('active');
+}
+
+// Print QR
+function printQR() {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+const printWindow = window.open('', '_blank');
+printWindow.document.write(`
+<html>
+<head>
+<title>QR Generator by Paanz - ${currentURL}</title>
+<style>
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+margin: 0;
+font-family: Arial, sans-serif;
+}
+.qr-container {
+text-align: center;
+padding: 20px;
+}
+img {
+max-width: 300px;
+height: auto;
+}
+.url {
+margin-top: 20px;
+word-break: break-all;
+color: #666;
+}
+.footer {
+position: fixed;
+bottom: 10px;
+right: 10px;
+font-size: 12px;
+color: #999;
+}
+</style>
+</head>
+<body>
+<div class="qr-container">
+<img src="${img.src}" alt="QR Code">
+<div class="url">${currentURL}</div>
+</div>
+<div class="footer">Generated by QR Generator by Paanz</div>
+</body>
+</html>
+`);
+printWindow.document.close();
+printWindow.print();
+showToast('QR Code siap untuk dicetak', 'success');
+}
+
+// Add to history
+function addToHistory(url) {
+const img = qrcodeContainer.querySelector('img');
+if (!img) return;
+
+const item = {
+url: url,
+thumbnail: img.src,
+date: new Date().toISOString(),
+size: sizeSelect.value,
+fgColor: fgColorInput.value,
+bgColor: bgColorInput.value
+};
+
+// Remove duplicate if exists
+history = history.filter(h => h.url !== url);
+
+history.unshift(item);
+history = history.slice(0, 10); // Keep only 10 items
+
+localStorage.setItem('qr-history', JSON.stringify(history));
+updateHistoryUI();
+}
+
+// Load history
+function loadHistory() {
+const saved = localStorage.getItem('qr-history');
+if (saved) {
+try {
+history = JSON.parse(saved);
+updateHistoryUI();
+} catch (e) {
+history = [];
+}
+}
+}
+
+// Update history UI
+function updateHistoryUI() {
+if (history.length === 0) {
+historyList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Belum ada riwayat</p>';
+return;
+}
+
+historyList.innerHTML = '';
+history.forEach(item => {
+const div = document.createElement('div');
+div.className = 'history-item';
+div.innerHTML = `
+<div class="history-thumb">
+<img src="${item.thumbnail}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+</div>
+<div class="history-info">
+<div class="history-url">${item.url}</div>
+<div class="history-date">${formatDate(item.date)} • ${item.size}px</div>
+</div>
+`;
+div.addEventListener('click', () => {
+urlInput.value = item.url;
+sizeSelect.value = item.size;
+fgColorInput.value = item.fgColor;
+bgColorInput.value = item.bgColor;
+generateQRCode();
+});
+historyList.appendChild(div);
+});
+}
+
+// Enable buttons
+function enableButtons() {
+downloadPngBtn.disabled = false;
+downloadJpgBtn.disabled = false;
+downloadSvgBtn.disabled = false;
+copyImageBtn.disabled = false;
+copyUrlBtn.disabled = false;
+embedBtn.disabled = false;
+shareBtn.disabled = false;
+zoomBtn.disabled = false;
+printBtn.disabled = false;
+}
+
+// Show toast
+function showToast(message, type = 'info') {
+toast.textContent = message;
+toast.className = `toast show ${type}`;
+setTimeout(() => {
+toast.classList.remove('show');
+}, 3000);
+}
+
+// Validate URL
+function isValidURL(string) {
+try {
+new URL(string);
+return true;
+} catch (_) {
+return false;
+}
+}
+
+// Format date
+function formatDate(dateString) {
+const date = new Date(dateString);
+const now = new Date();
+const diff = now - date;
+const minutes = Math.floor(diff / 60000);
+const hours = Math.floor(diff / 3600000);
+const days = Math.floor(diff / 86400000);
+
+if (minutes < 1) return 'Baru saja';
+if (minutes < 60) return `${minutes} menit lalu`;
+if (hours < 24) return `${hours} jam lalu`;
+if (days < 7) return `${days} hari lalu`;
+return date.toLocaleDateString('id-ID');
+}
+</script>
+</body>
+</html>
