@@ -1,4 +1,4 @@
-
+ https://alfanrizkyw.github.io/QR-Generator-by-Paan/
 
 Proyek ini adalah QR Code Generator by Paanz, sebuah alat online yang memungkinkan Anda untuk membuat QR Code dengan cepat dan mudah. Pengguna dapat memasukkan URL atau teks yang ingin dipindai, mengunggah file teks (.txt), dan kemudian memilih berbagai opsi kustomisasi untuk QR Code yang dihasilkan.
 
